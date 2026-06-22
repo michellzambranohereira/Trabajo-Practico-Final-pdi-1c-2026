@@ -79,6 +79,7 @@ def hsv_h(image):
     )
 
     return Image.fromarray(rgb_final)
+
 # HSV - Canal S
 
 def hsv_s(image):

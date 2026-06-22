@@ -17,11 +17,11 @@ Evaluar el impacto que tienen distintas técnicas de procesamiento de imágenes 
 
 Las técnicas implementadas son:
 
-* Ecualización del histograma.
-* CLAHE (Contrast Limited Adaptive Histogram Equalization).
+* Ecualización.
+* CLAHE.
 * Suavizado Gaussiano.
 * Ajuste de brillo y contraste.
-* Mejora de saturación mediante el espacio de color HSV.
+* Mejora mediante el espacio de color HSV.
 
 ---
 
@@ -90,7 +90,6 @@ La aplicación se abrirá en una interfaz web local mediante Gradio.
 
 ---
 
-## Autor
+## Autor: Michell Andreina Zambrano Hereira
 
-Trabajo Práctico Final - Procesamiento Digital de Imágenes
-Universidad - 2026
+Trabajo Práctico Final - Técnicas de Procesamiento Digital de Imágenes - 1er cuatrimestre 2026
