@@ -1,49 +1,210 @@
 import gradio as gr
 
 from caption_model import generate_caption
+
 from preprocessing import (
     equalization,
     gaussian_blur,
-    apply_clahe
+    apply_clahe,
+    adjust_brightness_contrast,
+    hsv_h,
+    hsv_s,
+    hsv_v
 )
 
-def process(image):
+
+def process(image, filters):
+
+    gallery = []
+    descriptions = ""
+
+    # Original
+    gallery.append((image, "Original"))
 
     original_caption = generate_caption(image)
 
-    equalized = equalization(image)
-    equalized_caption = generate_caption(equalized)
-
-    blurred = gaussian_blur(image)
-    blurred_caption = generate_caption(blurred)
-
-    clahe = apply_clahe(image)
-    clahe_caption = generate_caption(clahe)
-
-    return (
-        equalized,
-        blurred,
-        clahe,
-        original_caption,
-        equalized_caption,
-        blurred_caption,
-        clahe_caption
+    descriptions += (
+        "ORIGINAL\n"
+        f"{original_caption}\n\n"
+        "----------------------------------\n\n"
     )
 
-interface = gr.Interface(
-    fn=process,
-    inputs=gr.Image(type="pil"),
-    outputs=[
-        gr.Image(label="Ecualización"),
-        gr.Image(label="Suavizado Gaussiano"),
-        gr.Image(label="CLAHE"),
-        gr.Textbox(label="Descripción original"),
-        gr.Textbox(label="Descripción ecualizada"),
-        gr.Textbox(label="Descripción suavizada"),
-        gr.Textbox(label="Descripción CLAHE")
-    ],
-    title="Sistema Inteligente de Descripción de Imágenes",
-    description="Comparación del impacto del procesamiento digital sobre modelos de descripción automática."
-)
+    # Ecualización
+    if "Ecualización" in filters:
 
-interface.launch()
+        img = equalization(image)
+
+        gallery.append((img, "Ecualización"))
+
+        descriptions += (
+            "ECUALIZACIÓN\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # CLAHE
+    if "CLAHE" in filters:
+
+        img = apply_clahe(image)
+
+        gallery.append((img, "CLAHE"))
+
+        descriptions += (
+            "CLAHE\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # Suavizado
+    if "Suavizado Gaussiano" in filters:
+
+        img = gaussian_blur(image)
+
+        gallery.append((img, "Suavizado Gaussiano"))
+
+        descriptions += (
+            "SUAVIZADO GAUSSIANO\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # Brillo y contraste
+    if "Brillo y Contraste" in filters:
+
+        img = adjust_brightness_contrast(image)
+
+        gallery.append((img, "Brillo y Contraste"))
+
+        descriptions += (
+            "BRILLO Y CONTRASTE\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # HSV H
+    if "HSV (Canal H)" in filters:
+
+        img = hsv_h(image)
+
+        gallery.append((img, "HSV - H"))
+
+        descriptions += (
+            "HSV (CANAL H)\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # HSV S
+    if "HSV (Canal S)" in filters:
+
+        img = hsv_s(image)
+
+        gallery.append((img, "HSV - S"))
+
+        descriptions += (
+            "HSV (CANAL S)\n"
+            f"{generate_caption(img)}\n\n"
+            "----------------------------------\n\n"
+        )
+
+    # HSV V
+    if "HSV (Canal V)" in filters:
+
+        img = hsv_v(image)
+
+        gallery.append((img, "HSV - V"))
+
+        descriptions += (
+            "HSV (CANAL V)\n"
+            f"{generate_caption(img)}\n"
+        )
+
+    return gallery, descriptions
+
+
+
+with gr.Blocks() as demo:
+
+    gr.Markdown(
+        """
+        # Impacto del Procesamiento de Imágenes sobre Modelos de Hugging Face
+
+        Esta aplicación compara cómo distintas técnicas clásicas
+        de procesamiento modifican las descripciones generadas por
+        un modelo BLIP preentrenado de Hugging Face.
+        """
+    )
+
+    image_input = gr.Image(
+        type="pil",
+        label="Suba una imagen"
+    )
+
+    filters = gr.CheckboxGroup(
+
+        choices=[
+
+            "Ecualización",
+
+            "CLAHE",
+
+            "Suavizado Gaussiano",
+
+            "Brillo y Contraste",
+
+            "HSV (Canal H)",
+
+            "HSV (Canal S)",
+
+            "HSV (Canal V)"
+        ],
+
+        label="Seleccione las técnicas a comparar"
+    )
+
+    with gr.Row():
+
+        btn = gr.Button("🔍 Comparar")
+
+        clear_btn = gr.Button("🗑️ Limpiar")
+
+
+    gallery = gr.Gallery(
+        label="Imágenes comparadas",
+        columns=3,
+        height=450
+    )
+
+    descriptions = gr.Textbox(
+        label="Descripciones generadas por BLIP",
+        lines=20
+    )
+
+
+    btn.click(
+        fn=process,
+        inputs=[image_input, filters],
+        outputs=[gallery, descriptions]
+    )
+
+
+    clear_btn.click(
+        fn=lambda: (
+            None,      # imagen
+            [],        # filtros
+            None,      # galeria
+            ""         # descripciones
+        ),
+
+        inputs=[],
+
+        outputs=[
+            image_input,
+            filters,
+            gallery,
+            descriptions
+        ]
+    )
+
+
+demo.launch(share=True)
