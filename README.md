@@ -15,27 +15,19 @@ La aplicación permite cargar una imagen, aplicar diferentes técnicas de proces
 
 Evaluar el impacto que tienen distintas técnicas de procesamiento de imágenes sobre la interpretación realizada por un modelo de inteligencia artificial para generación de descripciones automáticas.
 
-Las técnicas implementadas son:
+La aplicación permite:
 
-* Ecualización.
-* CLAHE.
-* Suavizado Gaussiano.
-* Ajuste de brillo y contraste.
-* Mejora mediante el espacio de color HSV.
-
----
-
-## Modelo utilizado
-
-Se utiliza el modelo preentrenado **BLIP (Bootstrapping Language-Image Pre-training)** de Hugging Face para generar descripciones automáticas de las imágenes.
-
-El modelo recibe una imagen y produce una descripción textual en lenguaje natural.
+- Cargar una imagen.
+- Aplicar distintas técnicas de procesamiento.
+- Comparar visualmente las imágenes obtenidas.
+- Generar descripciones automáticas utilizando un modelo BLIP de Hugging Face.
+- Analizar el impacto del procesamiento sobre la interpretación del modelo.
 
 ---
 
 ## Técnicas de procesamiento implementadas
 
-- **Ecualización del histograma:** mejora el contraste global de la imagen redistribuyendo los niveles de intensidad.
+- **Ecualización:** mejora el contraste global de la imagen redistribuyendo los niveles de intensidad.
 
 - **CLAHE:** aumenta el contraste de forma adaptativa en regiones pequeñas, evitando la sobreamplificación del ruido.
 
@@ -44,6 +36,14 @@ El modelo recibe una imagen y produce una descripción textual en lenguaje natur
 - **Ajuste de brillo y contraste:** modifica la intensidad luminosa y la diferencia entre zonas claras y oscuras.
 
 - **Mejora en HSV:** realiza una mejora sobre el espacio de color HSV, aumentando la intensidad de los colores y conservando la apariencia natural de la imagen.
+
+---
+
+## Modelo utilizado
+
+Se utiliza el modelo preentrenado **BLIP (Bootstrapping Language-Image Pre-training)** de Hugging Face para generar descripciones automáticas de las imágenes.
+
+El modelo recibe una imagen y produce una descripción textual en lenguaje natural.
 
 ---
 
@@ -63,11 +63,11 @@ El modelo recibe una imagen y produce una descripción textual en lenguaje natur
 ## Estructura del proyecto
 
 ```text
-app.py                # Interfaz Gradio
-caption_model.py      # Modelo BLIP y generación de captions
-preprocessing.py      # Técnicas de procesamiento de imágenes
-requirements.txt      # Dependencias del proyecto
-README.md             # Documentación
+app.py                #Interfaz Gradio.
+caption_model.py      #Modelo BLIP y generación de captions.
+preprocessing.py      #Técnicas de procesamiento de imágenes.
+requirements.txt      #Dependencias del proyecto.
+README.md             #Documentación.
 ```
 
 ---
@@ -90,6 +90,14 @@ La aplicación se abrirá en una interfaz web local mediante Gradio.
 
 ---
 
-## Autor: Michell Andreina Zambrano Hereira
+## Aplicación desplegada
+
+El proyecto se encuentra desplegado en Hugging Face Spaces:
+
+https://huggingface.co/spaces/michellzambrano/trabajo-final-pdi-1c-2026
+
+---
+
+## Autora: Michell Andreina Zambrano Hereira
 
 Trabajo Práctico Final - Técnicas de Procesamiento Digital de Imágenes - 1er cuatrimestre 2026
